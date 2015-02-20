@@ -13,31 +13,31 @@ var express          = require('express')
   , nib              = require('nib')
   , cookieParser     = require('cookie-parser')
   , bodyParser       = require('body-parser')
-  , EmployeeProvider = require('./employeeprovider').EmployeeProvider;
+  , EmployeeProvider = require('./employeeprovider').EmployeeProvider
 
-var app = express();
+var app = express()
 
 // view engine setup
 app.configure(function () {
-  app.set('port', process.env.PORT || 3000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.set('view options', {layout: false});
+  app.set('port', process.env.PORT || 3000)
+  app.set('views', __dirname + '/views')
+  app.set('view engine', 'jade')
+  app.set('view options', {layout: false})
 
-  app.use(favicon());
-  app.use(logger('dev'));
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded());
-  app.use(cookieParser());
+  app.use(favicon())
+  app.use(logger('dev'))
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded())
+  app.use(cookieParser())
   app.use(express.methodOverride())
-  app.use(app.router);
-  app.use(require('stylus').middleware(path.join(__dirname, '/public')));
-  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(app.router)
+  app.use(require('stylus').middleware(path.join(__dirname, '/public')))
+  app.use(express.static(path.join(__dirname, 'public')))
 });
 
 app.configure('development', function () {
   app.use(express.errorHandler());
-});
+})
 
 function compile (str, path) {
   return stylus(str)
@@ -47,9 +47,9 @@ function compile (str, path) {
 app.use(stylus.middleware({
   src: __dirname + '/public'
 , compile: compile
-}));
+}))
 
-var employeeProvider = new EmployeeProvider('localhost', 27017);
+var employeeProvider = new EmployeeProvider('localhost', 27017)
 
 // Routes
 
@@ -59,16 +59,16 @@ app.get('/', function (req, res) {
     res.render('index', {
       title: 'Employees'
     , employees: emps
-    });
-  });
-});
+    })
+  })
+})
 
 // new employees
 app.get('/employee/new', function (req, res) {
   res.render('employee_new', {
     title: 'New Employee'
-  });
-});
+  })
+})
 
 // save new employee
 app.post('/employee/new', function(req, res){
@@ -77,8 +77,8 @@ app.post('/employee/new', function(req, res){
         name: req.param('name')
     }, function( error, docs) {
         res.redirect('/')
-    });
-});
+    })
+})
 
 //update an employee
 app.get('/employee/:id/edit', function(req, res) {
@@ -87,9 +87,9 @@ app.get('/employee/:id/edit', function(req, res) {
 		{
 			title: employee.title,
 			employee: employee
-		});
-	});
-});
+		})
+	})
+})
 
 //save updated employee
 app.post('/employee/:id/edit', function(req, res) {
@@ -98,15 +98,15 @@ app.post('/employee/:id/edit', function(req, res) {
 		name: req.param('name')
 	}, function(error, docs) {
 		res.redirect('/')
-	});
-});
+	})
+})
 
 //delete an employee
 app.post('/employee/:id/delete', function(req, res) {
 	employeeProvider.delete(req.param('_id'), function(error, docs) {
 		res.redirect('/')
-	});
-});
+	})
+})
 
 // update an employee
 
@@ -115,9 +115,9 @@ app.get('/employee/:id/edit', function (req, res) {
     , function (error, employee) {
         res.render('employee_edit', {
           employee: employee
-        });
-    });
-});
+        })
+    })
+})
 
 // save udated employee
 
@@ -127,8 +127,8 @@ app.post('/employee/:id/edit', function (req, res) {
   , name: req.param('name')
   }, function (error, docs) {
     res.redirect('/')
-  });
-});
+  })
+})
 
 // delete an employee
 
@@ -136,15 +136,15 @@ app.post('/employee/:id/delete', function (req, res) {
   employeeProvider.delete(req.param('_id')
     , function (error, docs) {
         res.redirect('/')
-    });
-});
+    })
+})
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
-});
+})
 
 /// error handlers
 
@@ -155,8 +155,8 @@ if (app.get('env') === 'development') {
         res.render('error', {
             message: err.message,
             error: err
-        });
-    });
+        })
+    })
 }
 
 // production error handler
@@ -165,8 +165,8 @@ app.use(function(err, req, res, next) {
     res.render('error', {
         message: err.message,
         error: {}
-    });
-});
+    })
+})
 
 
 module.exports = app;
