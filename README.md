@@ -21,4 +21,4 @@ I will try and get it on Heroku or appfog as well.
 
 Thanks for stopping by.
 
-Tony Brown Design | Develope
+Tony Brown Design | Develop
